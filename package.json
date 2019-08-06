@@ -19,6 +19,7 @@
   "author": "iBaff",
   "license": "MIT",
   "dependencies": {
+    "archiver": "^3.1.1",
     "nativefier": "^7.6.12"
   }
 }

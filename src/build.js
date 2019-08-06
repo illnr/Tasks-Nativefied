@@ -1,5 +1,6 @@
 var nativefier = require('nativefier').default;
 var fs = require('fs');
+var archiver = require('archiver');
 var packagejson = require('../package.json');
 
 var default_options = {
@@ -43,19 +44,36 @@ var options_linux32 = Object.assign({}, default_options, { platform: 'linux', ar
 
 /** BUILD */
 var build = function () {
-    
     nativefier(options_osx, function (error, appPath) {
         if (error) {
             console.error(error);
             return;
         }
         console.log('OSX App has been nativefied to', appPath);
-        fs.copyFile(appPath + '/' + default_options.name + '.app',
-            './dist/' + default_options.name + '.app',
-            function (err) {
-                if (err) throw err;
-                console.log('OSX App was copied to dist.');
-            });
+
+        //// ZIP ////
+        var output = fs.createWriteStream(process.cwd() + '/dist/' + default_options.name + '_osx.zip');
+        var archive = archiver('zip');
+        output.on('close', function () {
+            console.log('OSX zip ready!');
+        });
+        output.on('end', function () {
+            console.log('Data has been drained');
+        });
+        archive.on('warning', function (err) {
+            if (err.code === 'ENOENT') {
+                console.warn(err);
+            } else {
+                throw err;
+            }
+        });
+        archive.on('error', function (err) {
+            throw err;
+        });
+        // pipe archive data to the file
+        archive.pipe(output);
+        archive.directory(appPath + '/' + default_options.name + '.app', 'Tasks.app');
+        archive.finalize();
     });
 
     nativefier(options_win, function (error, appPath) {
@@ -64,12 +82,30 @@ var build = function () {
             return;
         }
         console.log('Win App has been nativefied to', appPath);
-        fs.copyFile(appPath + '/' + default_options.name + '.exe',
-            './dist/' + default_options.name + '.exe',
-            function (err) {
-                if (err) throw err;
-                console.log('Win App was copied to dist.');
-            });
+
+        //// ZIP ////
+        var output = fs.createWriteStream(process.cwd() + '/dist/' + default_options.name + '_win64.zip');
+        var archive = archiver('zip');
+        output.on('close', function () {
+            console.log('WIN zip ready!');
+        });
+        output.on('end', function () {
+            console.log('Data has been drained');
+        });
+        archive.on('warning', function (err) {
+            if (err.code === 'ENOENT') {
+                console.warn(err);
+            } else {
+                throw err;
+            }
+        });
+        archive.on('error', function (err) {
+            throw err;
+        });
+        // pipe archive data to the file
+        archive.pipe(output);
+        archive.file(appPath + '/' + default_options.name + '.exe', { name: '/' + default_options.name + '.exe' });
+        archive.finalize();
     });
 
     nativefier(options_linux64, function (error, appPath) {
@@ -78,12 +114,30 @@ var build = function () {
             return;
         }
         console.log('L64 App has been nativefied to', appPath);
-        fs.copyFile(appPath + '/' + default_options.name.toLowerCase(),
-            './dist/' + default_options.name.toLowerCase() + '_x64',
-            function (err) {
-                if (err) throw err;
-                console.log('L64 App was copied to dist.');
-            });
+
+        //// ZIP ////
+        var output = fs.createWriteStream(process.cwd() + '/dist/' + default_options.name.toLowerCase() + '_linux64.zip');
+        var archive = archiver('zip');
+        output.on('close', function () {
+            console.log('L64 zip ready!');
+        });
+        output.on('end', function () {
+            console.log('Data has been drained');
+        });
+        archive.on('warning', function (err) {
+            if (err.code === 'ENOENT') {
+                console.warn(err);
+            } else {
+                throw err;
+            }
+        });
+        archive.on('error', function (err) {
+            throw err;
+        });
+        // pipe archive data to the file
+        archive.pipe(output);
+        archive.file(appPath + '/' + default_options.name.toLowerCase(), { name: '/' + default_options.name.toLowerCase() });
+        archive.finalize();
     });
 
     nativefier(options_linux32, function (error, appPath) {
@@ -92,12 +146,30 @@ var build = function () {
             return;
         }
         console.log('L32 App has been nativefied to', appPath);
-        fs.copyFile(appPath + '/' + default_options.name.toLowerCase(),
-            './dist/' + default_options.name.toLowerCase() + '_ia32',
-            function (err) {
-                if (err) throw err;
-                console.log('L32 App was copied to dist.');
-            });
+
+        //// ZIP ////
+        var output = fs.createWriteStream(process.cwd() + '/dist/' + default_options.name.toLowerCase() + '_linux32.zip');
+        var archive = archiver('zip');
+        output.on('close', function () {
+            console.log('L32 zip ready!');
+        });
+        output.on('end', function () {
+            console.log('Data has been drained');
+        });
+        archive.on('warning', function (err) {
+            if (err.code === 'ENOENT') {
+                console.warn(err);
+            } else {
+                throw err;
+            }
+        });
+        archive.on('error', function (err) {
+            throw err;
+        });
+        // pipe archive data to the file
+        archive.pipe(output);
+        archive.file(appPath + '/' + default_options.name.toLowerCase(), { name: '/' + default_options.name.toLowerCase() });
+        archive.finalize();
     });
 };
 
