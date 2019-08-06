@@ -1,0 +1,24 @@
+{
+  "name": "tasks-nativefied",
+  "version": "0.0.1",
+  "description": "Google Tasks as a seperate App, without Calendar or GMail",
+  "main": "index.js",
+  "scripts": {
+    "build": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/iBaff/Tasks-Nativefied.git"
+  },
+  "keywords": [
+    "Google",
+    "Tasks",
+    "Nativ",
+    "nativefier"
+  ],
+  "author": "iBaff",
+  "license": "MIT",
+  "dependencies": {
+    "nativefier": "^7.6.12"
+  }
+}
